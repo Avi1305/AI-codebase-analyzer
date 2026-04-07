@@ -41,7 +41,14 @@ ${context}
       new HumanMessage(prompt),
     ]);
 
-    return response.content;
+    const raw = response.content as string;
+
+
+const cleaned = raw.replace(/```json|```/g, "").trim();
+
+return JSON.parse(cleaned);
+
+    
   } catch (error) {
     console.error("AI Error:", error);
     throw error;

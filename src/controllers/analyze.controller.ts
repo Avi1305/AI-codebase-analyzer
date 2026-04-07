@@ -2,6 +2,7 @@ import { type Request,type Response } from "express";
 import { cloneRepository } from "../services/github.service.js";
 import { readFilesFromRepo } from "../services/file.service.js";
 import { generateSummary } from "../services/ai.service.js";
+import { storeEmbeddings } from "../services/vector.service.js";
 
 export const analyzeRepo = async (req: Request, res: Response) => {
   try {
@@ -14,6 +15,8 @@ export const analyzeRepo = async (req: Request, res: Response) => {
     const repoPath = await cloneRepository(repoUrl);
 
     const files = await readFilesFromRepo(repoPath);
+
+    await storeEmbeddings(files);
     const summary = await generateSummary(files);
 
     return res.json({
