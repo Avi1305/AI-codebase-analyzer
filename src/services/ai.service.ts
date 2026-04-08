@@ -2,13 +2,13 @@ import {config} from "dotenv";
 config();
 
 
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { ChatMistralAI } from "@langchain/mistralai";
 import { HumanMessage } from "@langchain/core/messages";
 
-const model = new ChatGoogleGenerativeAI({
-  model: "gemini-2.5-flash",
+const model = new ChatMistralAI({
+  model: "mistral-large-latest",
   temperature: 0.3,
-  apiKey: process.env.GOOGLE_API_KEY!, // ✅ important
+  apiKey: process.env.MISTRAL_API_KEY!, // ✅ important
 });
 
 export const generateSummary = async (files: any[]) => {
@@ -23,10 +23,11 @@ export const generateSummary = async (files: any[]) => {
       .join("\n");
 
     const prompt = `
-You are a senior software engineer.
+You are a strict JSON generator.
 
-Analyze this codebase and return JSON:
+Return ONLY valid JSON. No explanation. No extra text.
 
+Format:
 {
   "summary": "",
   "techStack": [],
@@ -43,14 +44,43 @@ ${context}
 
     const raw = response.content as string;
 
+    // ✅ Clean markdown
+    const cleaned = raw
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
 
-const cleaned = raw.replace(/```json|```/g, "").trim();
+    // ✅ Extract JSON safely
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
 
-return JSON.parse(cleaned);
+    if (!jsonMatch) {
+      console.warn("⚠️ No JSON found, returning fallback");
+      return {
+        summary: cleaned,
+        techStack: [],
+        description: "Fallback response (no JSON detected)",
+      };
+    }
 
-    
+    try {
+      return JSON.parse(jsonMatch[0]);
+    } catch (parseError) {
+      console.warn("⚠️ JSON parse failed, returning fallback");
+      return {
+        summary: cleaned,
+        techStack: [],
+        description: "Fallback response (invalid JSON)",
+      };
+    }
+
   } catch (error) {
     console.error("AI Error:", error);
-    throw error;
+
+    // ✅ Never crash API
+    return {
+      summary: "AI failed to generate summary",
+      techStack: [],
+      description: "Error occurred during AI processing",
+    };
   }
 };

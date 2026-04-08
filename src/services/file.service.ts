@@ -9,8 +9,19 @@ export const readFilesFromRepo = async (dir: string) => {
   const files = fs.readdirSync(dir);
 
   for (const file of files) {
-    if (file === "node_modules" || file === ".git") continue;
+    const ignoredFolders = ["node_modules", ".git", "dist", "build"];
+
     const fullPath = path.join(dir, file);
+
+
+    if (ignoredFolders.some(folder => fullPath.includes(folder))) {
+      continue;
+    }
+
+
+    if (fullPath.endsWith(".min.js")) {
+      continue;
+    }
 
     const stat = fs.statSync(fullPath);
 

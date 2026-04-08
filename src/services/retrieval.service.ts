@@ -12,7 +12,7 @@ export const searchRelevantCode = async (query: string) => {
 
   const results = await index.query({
     vector: queryEmbedding,
-    topK: 5,
+    topK: 10,
     includeMetadata: true,
   });
 

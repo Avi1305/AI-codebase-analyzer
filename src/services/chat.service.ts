@@ -1,9 +1,9 @@
 import { searchRelevantCode } from "./retrieval.service.js";
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { ChatMistralAI } from "@langchain/mistralai";
 
-const model = new ChatGoogleGenerativeAI({
-  model: "gemini-2.5-flash",
-  apiKey: process.env.GOOGLE_API_KEY!,
+const model = new ChatMistralAI({
+  model: "mistral-large-latest",
+  apiKey: process.env.MISTRAL_API_KEY!,
 });
 
 export const chatWithRepo = async (question: string) => {
@@ -13,12 +13,19 @@ export const chatWithRepo = async (question: string) => {
     ?.map((m) => m.metadata?.content)
     .join("\n\n");
 
-  const prompt = `
-Answer based on this code:
+ const prompt = `
+You are a codebase assistant.
 
+ONLY answer based on the provided code context.
+
+If the answer is not present, say:
+"I could not find this in the codebase."
+
+Context:
 ${context}
 
-Question: ${question}
+Question:
+${question}
 `;
 
   const response = await model.invoke(prompt);

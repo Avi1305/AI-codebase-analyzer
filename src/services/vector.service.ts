@@ -1,5 +1,6 @@
 import { Pinecone } from "@pinecone-database/pinecone";
 import { embeddings } from "./embeddings.service.js";
+import { chunkFiles } from "./chunk.service.js";
 
 const pinecone = new Pinecone({
   apiKey: process.env.PINECONE_API_KEY!,
@@ -10,20 +11,23 @@ const index = pinecone.index({
 });
 
 export const storeEmbeddings = async (files: any[]) => {
-  const vectors = [];
+  
+  const chunks = await chunkFiles(files);
 
-  for (let i = 0; i < files.length; i++) {
-    const embedding = await embeddings.embedQuery(files[i].content);
+  const vectors = await Promise.all(
+    chunks.map(async (chunk, i) => {
+      const embedding = await embeddings.embedQuery(chunk.pageContent);
 
-    vectors.push({
-      id: `file-${i}`,
-      values: embedding,
-      metadata: {
-        filePath: files[i].filePath,
-        content: files[i].content,
-      },
-    });
-  }
+      return {
+        id: `chunk-${i}`,
+        values: embedding,
+        metadata: {
+          filePath: chunk.metadata.filePath,
+          content: chunk.pageContent,
+        },
+      };
+    })
+  );
 
   await index.upsert({records:vectors});
 };
