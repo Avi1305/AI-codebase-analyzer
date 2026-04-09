@@ -8,7 +8,7 @@ const TechStack = ({ techStack }: TechStackProps) => {
   if (!techStack || techStack.length === 0) return null;
 
   return (
-    <div className="bg-[#1F2937] rounded-xl p-6 shadow-xl shadow-black/20 border border-gray-800 h-full">
+    <div className="bg-[#1F2937] rounded-xl p-6 md:p-8 shadow-xl shadow-black/20 border border-gray-800 flex-1">
       <div className="flex items-center mb-6">
         <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3 border border-purple-500/30">
           <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
