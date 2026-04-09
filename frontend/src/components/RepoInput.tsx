@@ -1,18 +1,26 @@
 import { useState } from "react";
+import axios from "axios";
 
 export default function RepoInput() {
   const [repoUrl, setRepoUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (!repoUrl.trim()) return;
     setLoading(true);
-    // Mock API call
-    setTimeout(() => {
-      setLoading(false);
-      localStorage.setItem("analyzedRepo", repoUrl);
+    
+    try {
+      const response = await axios.post("http://localhost:3000/api/analyze", {
+        repoUrl,
+      });
+
+      localStorage.setItem("analysis", JSON.stringify(response.data));
       window.location.href = "/dashboard";
-    }, 1500);
+    } catch (error) {
+      console.error(error);
+      alert("Error analyzing repository. Please check the backend connection and try again.");
+      setLoading(false);
+    }
   };
 
   return (
