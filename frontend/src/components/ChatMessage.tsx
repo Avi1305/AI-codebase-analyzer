@@ -23,7 +23,7 @@ const ChatMessage = ({ role, content }: ChatMessageProps) => {
             <ReactMarkdown
               components={{
                 code({node, inline, className, children, ...props}: any) {
-                  const match = /language-(\w+)/.exec(className || '');
+                  
                   return !inline ? (
                     <div className="bg-[#111827] rounded-lg p-4 my-4 overflow-x-auto border border-gray-800 shadow-inner">
                       <code className={className} {...props}>
