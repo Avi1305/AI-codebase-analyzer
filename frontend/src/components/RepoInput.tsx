@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const API = import.meta.env.VITE_API_URL;
 const getRepoName = (url: string) => {
   if (!url) return "Unknown Repo";
@@ -25,6 +26,7 @@ const saveRepo = (repoData: any) => {
 };
 
 export default function RepoInput() {
+  const navigate = useNavigate();
   const [repoUrl, setRepoUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +42,7 @@ export default function RepoInput() {
       const analysisData = { ...(response.data as any), repoUrl };
       localStorage.setItem("analysis", JSON.stringify(analysisData));
       saveRepo(analysisData);
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
       alert("Error analyzing repository. Please check the backend connection and try again.");

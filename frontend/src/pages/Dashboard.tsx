@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import SummaryCard from '../components/SummaryCard';
 import TechStack from '../components/TechStack';
 import FileList from '../components/FileList';
+import { useNavigate } from 'react-router-dom';
 
 interface AnalysisData {
   success: boolean;
@@ -20,6 +21,7 @@ interface AnalysisData {
 const Dashboard = () => {
   const [data, setData] = useState<AnalysisData | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     try {
@@ -72,7 +74,7 @@ const Dashboard = () => {
             We couldn't find any recent analysis results. Please scan a repository first to generate insights.
           </p>
           <button 
-            onClick={() => window.location.href = '/'}
+            onClick={() => navigate("/")}
             className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all active:scale-95"
           >
             Start New Scan
