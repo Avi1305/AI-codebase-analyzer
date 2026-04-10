@@ -14,7 +14,8 @@ export default function RepoInput() {
         repoUrl,
       });
 
-      localStorage.setItem("analysis", JSON.stringify(response.data));
+      const analysisData = { ...response.data, repoUrl };
+      localStorage.setItem("analysis", JSON.stringify(analysisData));
       window.location.href = "/dashboard";
     } catch (error) {
       console.error(error);

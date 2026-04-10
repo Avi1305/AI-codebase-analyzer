@@ -1,14 +1,13 @@
-
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   const navigate = useNavigate(); 
   const menuItems = [
-    { name: 'Overview', active: true },
-    { name: 'Files', active: false },
-    { name: 'Security', active: false },
-    { name: 'Dependencies', active: false },
-    { name: 'Chat', active: false },
+    { name: 'Overview', path: '/dashboard' },
+    { name: 'Files', path: '/files' },
+    { name: 'Security', path: '/security' },
+    { name: 'Dependencies', path: '/dependencies' },
+    { name: 'Chat', path: '/chat' },
   ];
 
   return (
@@ -23,16 +22,19 @@ const Sidebar = () => {
       
       <nav className="flex-1 px-4 py-2 space-y-2 overflow-y-auto">
         {menuItems.map((item) => (
-          <button
+          <NavLink
             key={item.name}
-            className={`w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200 text-left font-medium ${
-              item.active
-                ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20 text-indigo-300 border border-indigo-500/30 shadow-inner'
-                : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800 border border-transparent'
-            }`}
+            to={item.path}
+            className={({ isActive }) =>
+              `w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200 text-left font-medium ${
+                isActive
+                  ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20 text-indigo-300 border border-indigo-500/30 shadow-inner'
+                  : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800 border border-transparent'
+              }`
+            }
           >
             {item.name}
-          </button>
+          </NavLink>
         ))}
       </nav>
       
