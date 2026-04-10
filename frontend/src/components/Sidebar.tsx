@@ -1,6 +1,8 @@
-import React from 'react';
+
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
+  const navigate = useNavigate(); 
   const menuItems = [
     { name: 'Overview', active: true },
     { name: 'Files', active: false },
@@ -12,7 +14,9 @@ const Sidebar = () => {
   return (
     <aside className="w-64 bg-[#111827] border-r border-gray-800 flex-col hidden md:flex h-full select-none">
       <div className="p-6 shrink-0">
-        <h1 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400 shrink-0">
+        <h1 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400 shrink-0 cursor-pointer"
+        onClick={() => navigate('/')}
+        >
           Codebase AI
         </h1>
       </div>

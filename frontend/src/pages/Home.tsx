@@ -1,14 +1,13 @@
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
+import { BeamsBackground } from "../components/ui/beams-background";
 import Features from "../components/Features";
 import CTA from "../components/CTA";
 import Footer from "../components/Footer";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-dark-bg text-white font-sans flex flex-col relative overflow-hidden">
-      {/* Background base */}
-      <div className="absolute inset-0 bg-dark-bg z-0 pointer-events-none" />
+    <BeamsBackground className="bg-dark-bg text-white font-sans" intensity="medium">
       
       {/* Content wrapper */}
       <div className="relative z-10 flex flex-col flex-1">
@@ -35,6 +34,6 @@ export default function Home() {
         
         <Footer />
       </div>
-    </div>
+    </BeamsBackground>
   );
 }
