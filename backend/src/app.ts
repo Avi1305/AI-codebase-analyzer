@@ -7,7 +7,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173", // local dev
-    "https://your-app.vercel.app" // deployed frontend
+    "https://ai-codebase-analyzer-iota.vercel.app/" // deployed frontend
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
