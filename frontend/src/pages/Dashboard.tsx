@@ -22,22 +22,28 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Mimic slight network delay for better UX and smooth loading animations
-    const timer = setTimeout(() => {
-      try {
-        const storedData = localStorage.getItem("analysis");
-        if (storedData) {
-          setData(JSON.parse(storedData));
-        }
-      } catch (error) {
-        console.error("Failed to parse analysis data:", error);
-      } finally {
+    try {
+      const storedData = localStorage.getItem("analysis");
+      if (storedData) {
+        setData(JSON.parse(storedData));
         setLoading(false);
+        return;
       }
+    } catch (error) {
+      console.error("Failed to parse analysis data:", error);
+    }
+    
+    // Fallback loading behavior if no data
+    const timer = setTimeout(() => {
+      setLoading(false);
     }, 800);
 
     return () => clearTimeout(timer);
   }, []);
+
+  const currentRepoStr = localStorage.getItem("currentRepo");
+  const currentRepo = currentRepoStr ? JSON.parse(currentRepoStr) : null;
+  const displayRepoUrl = currentRepo?.url || data?.repoUrl;
 
   if (loading) {
     return (
@@ -81,7 +87,7 @@ const Dashboard = () => {
       <Sidebar />
       
       <div className="flex-1 flex flex-col h-full relative">
-        <Header repoUrl={data.repoUrl} />
+        <Header repoUrl={displayRepoUrl} />
         
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent">

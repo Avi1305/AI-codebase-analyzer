@@ -4,6 +4,7 @@ const Sidebar = () => {
   const navigate = useNavigate(); 
   const menuItems = [
     { name: 'Overview', path: '/dashboard' },
+    { name: 'Repositories', path: '/repositories' },
     { name: 'Files', path: '/files' },
     { name: 'Security', path: '/security' },
     { name: 'Dependencies', path: '/dependencies' },

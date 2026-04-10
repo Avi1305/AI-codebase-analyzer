@@ -1,6 +1,29 @@
 import { useState } from "react";
 import axios from "axios";
 
+const getRepoName = (url: string) => {
+  if (!url) return "Unknown Repo";
+  const parts = url.split("/");
+  return parts[parts.length - 1];
+};
+
+const saveRepo = (repoData: any) => {
+  const existing = JSON.parse(localStorage.getItem("repos") || "[]");
+
+  const newRepo = {
+    id: Date.now().toString(),
+    name: getRepoName(repoData.repoUrl),
+    url: repoData.repoUrl,
+    analyzedAt: new Date().toISOString(),
+    techStack: repoData.summary?.techStack || [],
+    totalFiles: repoData.totalFiles,
+  };
+
+  const updated = [newRepo, ...existing];
+
+  localStorage.setItem("repos", JSON.stringify(updated));
+};
+
 export default function RepoInput() {
   const [repoUrl, setRepoUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,8 +37,9 @@ export default function RepoInput() {
         repoUrl,
       });
 
-      const analysisData = { ...response.data, repoUrl };
+      const analysisData = { ...(response.data as any), repoUrl };
       localStorage.setItem("analysis", JSON.stringify(analysisData));
+      saveRepo(analysisData);
       window.location.href = "/dashboard";
     } catch (error) {
       console.error(error);
