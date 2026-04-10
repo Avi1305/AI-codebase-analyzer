@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-
+const API = import.meta.env.VITE_API_URL;
 const getRepoName = (url: string) => {
   if (!url) return "Unknown Repo";
   const parts = url.split("/");
@@ -33,7 +33,7 @@ export default function RepoInput() {
     setLoading(true);
     
     try {
-      const response = await axios.post("http://localhost:3000/api/analyze", {
+      const response = await axios.post(`${API}/api/analyze`, {
         repoUrl,
       });
 
